@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172e52;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            display: flex;
+            min-height: 85vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: white;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar h3 {
+            color: #64748b;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #eaf1fb;
+            color: #17365d;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .sidebar button:hover {
+            background: #bfdbfe;
+        }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .welcome {
+            background: #e8f1ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .card h2 {
+            color: #17365d;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #64748b;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .field input:focus {
+            outline: 2px solid #93c5fd;
+        }
+
+        .calculate {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 7px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .calculate:hover {
+            background: #1d4ed8;
+        }
+
+        .reset {
+            background: #e2e8f0;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 18px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result strong {
+            color: #065f46;
+            font-size: 22px;
+        }
+
+        .error {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .formula {
+            background: #f8fafc;
+            padding: 12px;
+            margin-top: 15px;
+            border-left: 4px solid #2563eb;
+            border-radius: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚛ Physics Calculator</h1>
+    <p>Vectors | Projectile Motion | Circular Motion</p>
+</header>
+
+<div class="container">
+
+    <!-- Navigation -->
+    <nav class="sidebar">
+        <h3>MAIN MENU</h3>
+
+        <button onclick="showSection('home')">
+            🏠 Home
+        </button>
+
+        <button onclick="showSection('vectors')">
+            ↗ Vectors
+        </button>
+
+        <button onclick="showSection('projectile')">
+            🎯 Projectile Motion
+        </button>
+
+        <button onclick="showSection('circular')">
+            🔄 Circular Motion
+        </button>
+    </nav>
+
+    <main>
+
+        <!-- Home -->
+        <section id="home" class="section active">
+
+            <div class="welcome">
+                <h2>Welcome to Physics Calculator!</h2>
+                <p>
+                    Select a topic from the sidebar to
+                    perform your physics calculations.
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>Available Calculations</h2>
+
+                <h3>1. Vectors</h3>
+                <p>
+                    Resultant magnitude and resultant direction.
+                </p>
+
+                <h3>2. Projectile Motion</h3>
+                <p>
+                    Time of flight, maximum height and
+                    horizontal range.
+                </p>
+
+                <h3>3. Circular Motion</h3>
+                <p>
+                    Centripetal acceleration and centripetal force.
+                </p>
+            </div>
+        </section>
+
+        <!-- Vectors -->
+        <section id="vectors" class="section">
+
+            <div class="card">
+                <h2>↗ Resultant Vector Magnitude</h2>
+
+                <p>
+                    Calculate the magnitude of the sum
+                    of two vectors.
+                </p>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Vector A - X component</label>
+                        <input type="number" id="ax" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector A - Y component</label>
+                        <input type="number" id="ay" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector B - X component</label>
+                        <input type="number" id="bx" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector B - Y component</label>
+                        <input type="number" id="by" step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateMagnitude()">
+                    Calculate Magnitude
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="magnitudeResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    R = √(Rx² + Ry²)
+                    <br>
+                    Rx = Ax + Bx
+                    <br>
+                    Ry = Ay + By
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>↗ Resultant Vector Direction</h2>
+
+                <p>
+                    Calculate the direction of the resultant
+                    vector from the positive X-axis.
+                </p>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Vector A - X component</label>
+                        <input type="number" id="dax" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector A - Y component</label>
+                        <input type="number" id="day" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector B - X component</label>
+                        <input type="number" id="dbx" step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Vector B - Y component</label>
+                        <input type="number" id="dby" step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateDirection()">
+                    Calculate Direction
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="directionResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    θ = atan2(Ry, Rx)
+                </div>
+            </div>
+        </section>
+
+        <!-- Projectile Motion -->
+        <section id="projectile" class="section">
+
+            <div class="welcome">
+                <h2>🎯 Projectile Motion</h2>
+                <p>
+                    Assumes the projectile lands at its
+                    launch height, with no air resistance.
+                    Gravity = 9.81 m/s².
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>Time of Flight</h2>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Initial Velocity (m/s)</label>
+                        <input type="number" id="timeVelocity"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Launch Angle (degrees)</label>
+                        <input type="number" id="timeAngle"
+                            step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateTime()">
+                    Calculate Time
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="timeResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    T = 2u sin(θ) / g
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Maximum Height</h2>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Initial Velocity (m/s)</label>
+                        <input type="number" id="heightVelocity"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Launch Angle (degrees)</label>
+                        <input type="number" id="heightAngle"
+                            step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateHeight()">
+                    Calculate Height
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="heightResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    H = u² sin²(θ) / 2g
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Horizontal Range</h2>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Initial Velocity (m/s)</label>
+                        <input type="number" id="rangeVelocity"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Launch Angle (degrees)</label>
+                        <input type="number" id="rangeAngle"
+                            step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateRange()">
+                    Calculate Range
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="rangeResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    R = u² sin(2θ) / g
+                </div>
+            </div>
+        </section>
+
+        <!-- Circular Motion -->
+        <section id="circular" class="section">
+
+            <div class="card">
+                <h2>🔄 Centripetal Acceleration</h2>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Velocity (m/s)</label>
+                        <input type="number" id="accVelocity"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Radius (m)</label>
+                        <input type="number" id="accRadius"
+                            step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateAcceleration()">
+                    Calculate Acceleration
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="accResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    a = v² / r
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔄 Centripetal Force</h2>
+
+                <div class="input-grid">
+
+                    <div class="field">
+                        <label>Mass (kg)</label>
+                        <input type="number" id="forceMass"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Velocity (m/s)</label>
+                        <input type="number" id="forceVelocity"
+                            step="any">
+                    </div>
+
+                    <div class="field">
+                        <label>Radius (m)</label>
+                        <input type="number" id="forceRadius"
+                            step="any">
+                    </div>
+
+                </div>
+
+                <button class="calculate"
+                    onclick="calculateForce()">
+                    Calculate Force
+                </button>
+
+                <button class="reset"
+                    onclick="resetCard(this)">
+                    Reset
+                </button>
+
+                <div class="result" id="forceResult"></div>
+
+                <div class="formula">
+                    <b>Formula:</b>
+                    F = mv² / r
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    Physics Calculator | Mechanics Project
+</footer>
+
+<script>
+
+    // Gravitational acceleration
+    const g = 9.81;
+
+    // Change visible section
+    function showSection(sectionId) {
+
+        let sections = document.querySelectorAll(".section");
+
+        sections.forEach(function(section) {
+            section.classList.remove("active");
+        });
+
+        document.getElementById(sectionId)
+            .classList.add("active");
+    }
+
+    // Read and validate numerical inputs
+    function getValues(ids) {
+
+        let values = [];
+
+        for (let id of ids) {
+
+            let input = document.getElementById(id);
+
+            if (input.value.trim() === "") {
+                throw new Error("Please fill in all fields.");
+            }
+
+            let number = Number(input.value);
+
+            if (!Number.isFinite(number)) {
+                throw new Error("Please enter valid numbers.");
+            }
+
+            values.push(number);
+        }
+
+        return values;
+    }
+
+    // Display calculated result
+    function showResult(id, label, value, unit) {
+
+        let result = document.getElementById(id);
+
+        if (!Number.isFinite(value)) {
+            showError(id, "Result is outside the valid range.");
+            return;
+        }
+
+        result.classList.remove("error");
+        result.style.display = "block";
+
+        result.innerHTML =
+            "<p>" + label + "</p>" +
+            "<strong>" + value.toFixed(3) +
+            " " + unit + "</strong>";
+    }
+
+    // Display error
+    function showError(id, message) {
+
+        let result = document.getElementById(id);
+
+        result.classList.add("error");
+        result.style.display = "block";
+        result.textContent = message;
+    }
+
+    // Reset fields and result
+    function resetCard(button) {
+
+        let card = button.closest(".card");
+
+        let inputs = card.querySelectorAll("input");
+
+        inputs.forEach(function(input) {
+            input.value = "";
+        });
+
+        let result = card.querySelector(".result");
+
+        result.style.display = "none";
+        result.classList.remove("error");
+        result.textContent = "";
+    }
+
+    // Validate projectile inputs
+    function validateProjectile(u, angle) {
+
+        if (u < 0) {
+            throw new Error(
+                "Initial velocity cannot be negative."
+            );
+        }
+
+        if (angle < 0 || angle > 90) {
+            throw new Error(
+                "Launch angle must be between 0 and 90 degrees."
+            );
+        }
+    }
+
+    // Convert degrees to radians
+    function toRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    // 1. Resultant vector magnitude
+    function calculateMagnitude() {
+
+        try {
+
+            let [ax, ay, bx, by] =
+                getValues(["ax", "ay", "bx", "by"]);
+
+            let rx = ax + bx;
+            let ry = ay + by;
+
+            let magnitude = Math.hypot(rx, ry);
+
+            showResult(
+                "magnitudeResult",
+                "Resultant Magnitude:",
+                magnitude,
+                "units"
+            );
+
+        } catch (error) {
+            showError("magnitudeResult", error.message);
+        }
+    }
+
+    // 2. Resultant vector direction
+    function calculateDirection() {
+
+        try {
+
+            let [ax, ay, bx, by] =
+                getValues(["dax", "day", "dbx", "dby"]);
+
+            let rx = ax + bx;
+            let ry = ay + by;
+
+            if (rx === 0 && ry === 0) {
+                throw new Error(
+                    "Direction is undefined for a zero vector."
+                );
+            }
+
+            let angle = Math.atan2(ry, rx) * 180 / Math.PI;
+
+            if (angle < 0) {
+                angle += 360;
+            }
+
+            showResult(
+                "directionResult",
+                "Resultant Direction:",
+                angle,
+                "degrees"
+            );
+
+        } catch (error) {
+            showError("directionResult", error.message);
+        }
+    }
+
+    // 3. Time of flight
+    function calculateTime() {
+
+        try {
+
+            let [u, angle] =
+                getValues(["timeVelocity", "timeAngle"]);
+
+            validateProjectile(u, angle);
+
+            let theta = toRadians(angle);
+
+            let time = (2 * u * Math.sin(theta)) / g;
+
+            showResult(
+                "timeResult",
+                "Time of Flight:",
+                time,
+                "s"
+            );
+
+        } catch (error) {
+            showError("timeResult", error.message);
+        }
+    }
+
+    // 4. Maximum height
+    function calculateHeight() {
+
+        try {
+
+            let [u, angle] =
+                getValues(["heightVelocity", "heightAngle"]);
+
+            validateProjectile(u, angle);
+
+            let theta = toRadians(angle);
+
+            let height =
+                (u * u * Math.pow(Math.sin(theta), 2))
+                / (2 * g);
+
+            showResult(
+                "heightResult",
+                "Maximum Height:",
+                height,
+                "m"
+            );
+
+        } catch (error) {
+            showError("heightResult", error.message);
+        }
+    }
+
+    // 5. Horizontal range
+    function calculateRange() {
+
+        try {
+
+            let [u, angle] =
+                getValues(["rangeVelocity", "rangeAngle"]);
+
+            validateProjectile(u, angle);
+
+            let theta = toRadians(angle);
+
+            let range =
+                (u * u * Math.sin(2 * theta)) / g;
+
+            showResult(
+                "rangeResult",
+                "Horizontal Range:",
+                range,
+                "m"
+            );
+
+        } catch (error) {
+            showError("rangeResult", error.message);
+        }
+    }
+
+    // 6. Centripetal acceleration
+    function calculateAcceleration() {
+
+        try {
+
+            let [v, r] =
+                getValues(["accVelocity", "accRadius"]);
+
+            if (r <= 0) {
+                throw new Error(
+                    "Radius must be greater than zero."
+                );
+            }
+
+            if (v < 0) {
+                throw new Error(
+                    "Speed cannot be negative."
+                );
+            }
+
+            let acceleration = (v * v) / r;
+
+            showResult(
+                "accResult",
+                "Centripetal Acceleration:",
+                acceleration,
+                "m/s²"
+            );
+
+        } catch (error) {
+            showError("accResult", error.message);
+        }
+    }
+
+    // 7. Centripetal force
+    function calculateForce() {
+
+        try {
+
+            let [m, v, r] =
+                getValues([
+                    "forceMass",
+                    "forceVelocity",
+                    "forceRadius"
+                ]);
+
+            if (m <= 0) {
+                throw new Error(
+                    "Mass must be greater than zero."
+                );
+            }
+
+            if (r <= 0) {
+                throw new Error(
+                    "Radius must be greater than zero."
+                );
+            }
+
+            if (v < 0) {
+                throw new Error(
+                    "Speed cannot be negative."
+                );
+            }
+
+            let force = (m * v * v) / r;
+
+            showResult(
+                "forceResult",
+                "Centripetal Force:",
+                force,
+                "N"
+            );
+
+        } catch (error) {
+            showError("forceResult", error.message);
+        }
+    }
+
+</script>
+
+</body>
+</html>
+
